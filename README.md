@@ -24,7 +24,7 @@ directly.
 
 If it works, get an editor or IDE that works with Clojure and that you
 feel comfortable with
--[here](http://dev.clojure.org/display/doc/IDEs+and+Editors) is a
+- [here](http://dev.clojure.org/display/doc/IDEs+and+Editors) is a
 list.
 
 See if you can edit `project.clj`, for example.  Note that we will
