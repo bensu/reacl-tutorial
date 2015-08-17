@@ -24,10 +24,12 @@ directly.
 
 If it works, get an editor or IDE that works with Clojure and that you
 feel comfortable with
--[here](http://dev.clojure.org/display/doc/IDEs+and+Editors) here is a
-list.  See if you can edit `project.clj`, for example.  Note that we
-will only need basic editor functionality for the tutorial, and won't
-spend much time on editor support for Clojure at the tutorial.
+-[here](http://dev.clojure.org/display/doc/IDEs+and+Editors) is a
+list.
+
+See if you can edit `project.clj`, for example.  Note that we will
+only need basic editor functionality for the tutorial, and won't spend
+much time on editor support for Clojure at the tutorial.
 
 ## License
 
