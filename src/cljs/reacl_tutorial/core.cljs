@@ -1,6 +1,7 @@
 (ns ^:figwheel-always reacl-tutorial.core
   (:require [reacl.core :as reacl :include-macros true]
-            [reacl.dom :as dom :include-macros true]))
+            [reacl.dom :as dom :include-macros true]
+            [clojure.string :as string]))
 
 (enable-console-print!)
 
@@ -41,14 +42,33 @@
   [{:keys [first last] :as contact}]
   (str last ", " first (middle-name contact)))
 
-(reacl/defclass contact-display
+(defn parse-contact [contact-str]
+  (let [[first middle last :as parts] (string/split contact-str #"\s+")
+        [first last middle] (if (nil? last) [first middle] [first last middle])
+        middle (when middle (string/replace middle "." ""))
+        c (if middle (count middle) 0)]
+    (when (>= (count parts) 2)
+      (cond-> {:first first :last last}
+        (== c 1) (assoc :middle-initial middle)
+        (>= c 2) (assoc :middle middle)))))
+
+#_(reacl/defclass contact-display
   this contact [parent] ; parent later
   render
   (dom/li
    (dom/span (display-name contact))
    (dom/button {:onclick (fn [e] (reacl/send-message! parent contact))} "Delete"))) ; add later
 
-(reacl/defclass contacts-display
+(defrecord Delete [contact])
+
+(reacl/defclass contact-display
+  this contact [parent] ; parent later
+  render
+  (dom/li
+   (dom/span (display-name contact))
+   (dom/button {:onclick (fn [e] (reacl/send-message! parent (->Delete contact)))} "Delete")))
+
+#_(reacl/defclass contacts-display
   this data []
   render
   (dom/div
@@ -59,6 +79,37 @@
   (fn [msg]
     (reacl/return :app-state
                   (vec (remove (fn [c] (= c msg)) data)))))
+
+(defrecord NewText [text])
+(defrecord Add [contact])
+
+(reacl/defclass contacts-display
+  this data new-text []
+  initial-state ""
+  render
+  (dom/div
+   (dom/h2 "Contact list")
+   (dom/ul
+    (map (fn [c] (contact-display c reacl/no-reaction this)) data))
+   (dom/div
+    (dom/input {:type "text" :value new-text
+                :onchange (fn [e] (reacl/send-message! this
+                                                       (->NewText (.. e -target -value))))})
+    (dom/button {:onclick (fn [e] (reacl/send-message! this (->Add (parse-contact new-text))))} "Add contact")))
+  handle-message
+  (fn [msg]
+    (println "Msg" msg)
+    (cond
+      (instance? Delete msg)
+      (reacl/return :app-state
+                    (vec (remove (fn [c] (= c (:contact msg))) data)))
+
+      (instance? NewText msg)
+      (reacl/return :local-state (:text msg))
+      
+      (instance? Add msg)
+      (reacl/return :app-state (conj data (:contact msg))
+                    :local-state ""))))
            
 ;; string-display
 #_ (def top
