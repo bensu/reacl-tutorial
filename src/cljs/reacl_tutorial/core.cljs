@@ -6,11 +6,15 @@
 
 (println "Hello world!")
 
-(reacl/defview demo
-  this []
+(reacl/defclass string-display
+  this s []
   render
-  (dom/h1 "Reacl Tutorial"))
+  (dom/h1 s)
+  handle-message
+  (fn [new]
+    (reacl/return :app-state new)))
 
-(reacl/render-component
- (.getElementById js/document "content")
- demo)
+(def top
+  (reacl/render-component
+   (.getElementById js/document "content")
+   string-display "Hello world!" reacl/no-reaction))
