@@ -110,7 +110,63 @@
       (instance? Add msg)
       (reacl/return :app-state (conj data (:contact msg))
                     :local-state ""))))
-           
+
+
+(def registry
+  {:people
+   [{:type :student :first "Ben" :last "Bitdiddle" :email "benb@mit.edu"}
+    {:type :student :first "Alyssa" :middle-initial "P" :last "Hacker"
+     :email "aphacker@mit.edu"}
+    {:type :professor :first "Gerald" :middle "Jay" :last "Sussman"
+     :email "metacirc@mit.edu" :classes [:6001 :6946]}
+    {:type :student :first "Eva" :middle "Lu" :last "Ator" :email "eval@mit.edu"}
+    {:type :student :first "Louis" :last "Reasoner" :email "prolog@mit.edu"}
+    {:type :professor :first "Hal" :last "Abelson" :email "evalapply@mit.edu"
+     :classes [:6001]}]
+   :classes
+   {:6001 "The Structure and Interpretation of Computer Programs"
+    :6946 "The Structure and Interpretation of Classical Mechanics"
+    :1806 "Linear Algebra"}})
+
+(defn student-view
+  [student]
+  (dom/li (display-name student)))
+
+(defn professor-view
+  [professor]
+  (dom/li
+   (dom/div (display-name professor))
+   (dom/label "Classes")
+   (dom/ul
+    (map dom/li (:classes professor)))))
+
+(defmulti entry-view :type)
+
+(defmethod entry-view :student
+  [person]
+  (student-view person))
+
+(defmethod entry-view :professor
+  [person]
+  (professor-view person))
+
+(defn people [data]
+  (->> data
+    :people
+    (mapv (fn [x]
+            (if (:classes x)
+              (update-in x [:classes]
+                (fn [cs] (mapv (:classes data) cs)))
+               x)))))
+
+(reacl/defclass registry-display
+  this data []
+  render
+  (dom/div
+   (dom/h2 "Registry")
+   (dom/ul
+    (map entry-view (people data)))))
+
 ;; string-display
 #_ (def top
   (reacl/render-component
@@ -123,7 +179,13 @@
    (.getElementById js/document "content")
    list-display ["Lion" "Zebra" "Buffalo" "Antelope"] reacl/no-reaction))
 
-(def top
+;; contacts
+#_(def top
   (reacl/render-component
    (.getElementById js/document "content")
    contacts-display contacts reacl/no-reaction))
+
+(def top
+  (reacl/render-component
+   (.getElementById js/document "content")
+   registry-display registry reacl/no-reaction))
