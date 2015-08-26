@@ -3,7 +3,7 @@
   :url "https://github.com/active-group/reacl-tutorial"
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.48" :classifier "aot"]
-                 [reacl "1.1.0"]]
+                 [reacl "1.3.0"]]
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-ring "0.9.6"]
             [lein-figwheel "0.3.5"]]
