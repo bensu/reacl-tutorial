@@ -14,12 +14,15 @@
   (fn [new]
     (reacl/return :app-state new)))
 
+(defn stripe
+  [bgc text]
+  (dom/li {:style {:background-color bgc}} text))
+
 (reacl/defclass list-display
   this lis []
   render
-  (dom/ul {:class "animals"} ;; check CSS
-   (map (fn [t] (dom/li t))
-        lis)))
+  (dom/ul {:class "animals"}
+   (map stripe (cycle ["#ff0" "#fff"]) lis)))
 
 ;; string-display
 #_ (def top
