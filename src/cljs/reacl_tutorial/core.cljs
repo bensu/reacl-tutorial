@@ -14,7 +14,21 @@
   (fn [new]
     (reacl/return :app-state new)))
 
-(def top
+(reacl/defclass list-display
+  this lis []
+  render
+  (dom/ul {:class "animals"} ;; check CSS
+   (map (fn [t] (dom/li t))
+        lis)))
+
+;; string-display
+#_ (def top
   (reacl/render-component
    (.getElementById js/document "content")
    string-display "Hello world!" reacl/no-reaction))
+
+;; list-display
+(def top
+  (reacl/render-component
+   (.getElementById js/document "content")
+   list-display ["Lion" "Zebra" "Buffalo" "Antelope"] reacl/no-reaction))
