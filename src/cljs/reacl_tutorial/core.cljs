@@ -167,6 +167,75 @@
    (dom/ul
     (map entry-view (people data)))))
 
+(defn display [show]
+  (if show
+    {}
+    {:display "none"}))
+
+(defrecord EditableLocalState
+  [text editing?])
+
+(defrecord Editing [])
+(defrecord CommitEdit [])
+
+(reacl/defclass editable
+  this text local-state []
+
+  initial-state (->EditableLocalState text false)
+  
+  render
+  (let [editing? (:editing? local-state)
+        ttext (:text local-state)]
+    (dom/li
+     (dom/span {:style (display (not editing?))}
+               text)
+     (dom/input {:style (display editing?)
+                 :value ttext
+                 :onchange (fn [e] (reacl/send-message! this (->NewText (.. e -target -value))))
+                 :onkeydown (fn [e]
+                              (when (= (.-key e) "Enter")
+                                (reacl/send-message! this (->CommitEdit))))
+                 :onblur (fn [e]
+                           (reacl/send-message! this (->CommitEdit)))})
+     (dom/button {:style (display (not editing?))
+                  :onclick (fn [e] (reacl/send-message! this (->Editing)))}
+                 "Edit")))
+
+  handle-message
+  (fn [msg]
+    (cond
+      (instance? Editing msg)
+      (reacl/return :local-state
+                    (assoc local-state :editing? true))
+
+      (instance? NewText msg)
+      (reacl/return :local-state
+                    (assoc local-state :text (:text msg)))
+
+      (instance? CommitEdit msg)
+      (reacl/return :local-state
+                    (assoc local-state :editing? false)
+                    :app-state
+                    (:text local-state)))))
+                    
+(defrecord ChangeClassName [key name])
+
+(reacl/defclass classes-display
+  this data []
+
+  render
+  (dom/div {:id "classes"}
+           (dom/h2 "Classes")
+           (map (fn [[key name]] (editable name (reacl/reaction this (fn [name] (->ChangeClassName key name)))))
+                (:classes data)))
+
+  handle-message
+  (fn [msg]
+    (cond
+      (instance? ChangeClassName msg)
+      (reacl/return :app-state
+                    (assoc-in data [:classes (:key msg)] (:name msg))))))
+      
 ;; string-display
 #_ (def top
   (reacl/render-component
@@ -185,7 +254,21 @@
    (.getElementById js/document "content")
    contacts-display contacts reacl/no-reaction))
 
-(def top
+;; registry
+#_(def top
   (reacl/render-component
    (.getElementById js/document "content")
    registry-display registry reacl/no-reaction))
+
+;; registry + classes
+
+(def registry-top
+  (reacl/render-component
+   (.getElementById js/document "registry")
+   registry-display registry reacl/no-reaction))
+
+(def classes-top
+  (reacl/render-component
+   (.getElementById js/document "classes")
+   classes-display registry reacl/no-reaction))
+
