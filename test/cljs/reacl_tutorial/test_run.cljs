@@ -1,8 +1,10 @@
 (ns ^:figwheel-always reacl-tutorial.test-run
-  (:require [cljs.test :refer-macros [run-tests run-all-tests]]))
+  (:require [cljs.test :refer-macros [run-tests run-all-tests]]
+            [reacl-tutorial.core-test]))
 
 (enable-console-print!)
 
 (defn ^:export run
   []
-  (run-all-tests #"reacl-tutorial\..*-test"))
+  (run-tests 'reacl-tutorial.core-test))
+

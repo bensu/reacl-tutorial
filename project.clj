@@ -6,7 +6,7 @@
                  [reacl "1.3.0"]]
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-ring "0.9.6"]
-            [lein-figwheel "0.3.5"]]
+            [lein-figwheel "0.3.7"]]
 
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
