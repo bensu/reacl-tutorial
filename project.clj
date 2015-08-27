@@ -2,7 +2,7 @@
   :description "Reacl tutorial"
   :url "https://github.com/active-group/reacl-tutorial"
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.107" #_"0.0-3269"]
+                 [org.clojure/clojurescript "1.7.107" :classifier "aot"]
                  [reacl "1.3.0"]]
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-ring "0.9.6"]
