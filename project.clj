@@ -2,7 +2,7 @@
   :description "Reacl tutorial"
   :url "https://github.com/active-group/reacl-tutorial"
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.48" :classifier "aot"]
+                 [org.clojure/clojurescript "1.7.107" #_"0.0-3269"]
                  [reacl "1.3.0"]]
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-ring "0.9.6"]
@@ -11,16 +11,26 @@
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
 
-  :clean-targets ^{:protect false} ["resources/public/js" "target"]
+  :clean-targets ^{:protect false} ["resources/public/js" "resources/test/js"]
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
                         :figwheel {:load-warninged-code true}
 
                         :compiler {:main reacl-tutorial.core
-                                   :asset-path "js/out"
+                                   :asset-path "js/dev-out"
                                    :output-to "resources/public/js/cljs.js"
-                                   :output-dir "resources/public/js/out"
+                                   :output-dir "resources/public/js/dev-out"
+                                   :source-map-timestamp true}}
+                       {:id "test"
+                        :source-paths ["src/cljs" "test/cljs"]
+                        :figwheel {:load-warninged-code true
+                                   :on-jsload "reacl-tutorial.test-run/run"}
+
+                        :compiler {:main reacl-tutorial.test-run
+                                   :asset-path "js/test-out"
+                                   :output-to "resources/public/js/test.js"
+                                   :output-dir "resources/public/js/test-out"
                                    :source-map-timestamp true}}]}
 
   :figwheel {
