@@ -12,12 +12,12 @@ You should clone this repository, [install Java JDK
 [install Leiningen](http://leiningen.org/#install), and run
 
 ```
-lein ring server
+lein figwheel
 ```
 
 in this directory.  Your browser should display a web page that says
 "Reacl Tutorial".  If your browser does not come up, point it to
-[`http://localhost:3000/index.html`](http://localhost:3000/index.html).
+[`http://localhost:3449/`](http://localhost:3449/).
 
 If any of the above doesn't work as described, don't hesitate to contact me
 directly.
