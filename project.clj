@@ -6,7 +6,8 @@
                  [reacl "1.4.0"]]
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-ring "0.9.6"]
-            [lein-figwheel "0.3.7"]]
+            [lein-figwheel "0.3.7"]
+            [lein-catnip "0.5.1" :exclusions [org.clojure/clojure]]]
 
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
