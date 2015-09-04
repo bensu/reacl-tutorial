@@ -1,6 +1,7 @@
 (ns ^:figwheel-always reacl-tutorial.core
   (:require [reacl.core :as reacl :include-macros true]
-            [reacl.dom :as dom :include-macros true]))
+            [reacl.dom :as dom :include-macros true]
+            [clojure.string :as string]))
 
 (enable-console-print!)
 
@@ -13,6 +14,25 @@
    {:first "Louis" :last "Reasoner" :email "prolog@mit.edu"}
    {:first "Cy" :middle-initial "D" :last "Effect" :email "bugs@mit.edu"}
    {:first "Lem" :middle-initial "E" :last "Tweakit" :email "morebugs@mit.edu"}])
+
+(defn middle-name [{:keys [middle middle-initial]}]
+  (cond
+    middle (str " " middle)
+    middle-initial (str " " middle-initial ".")))
+
+(defn display-name
+  [{:keys [first last] :as contact}]
+  (str last ", " first (middle-name contact)))
+
+(defn parse-contact [contact-str]
+  (let [[first middle last :as parts] (string/split contact-str #"\s+")
+        [first last middle] (if (nil? last) [first middle] [first last middle])
+        middle (when middle (string/replace middle "." ""))
+        c (if middle (count middle) 0)]
+    (when (>= (count parts) 2)
+      (cond-> {:first first :last last}
+        (== c 1) (assoc :middle-initial middle)
+        (>= c 2) (assoc :middle middle)))))
 
 (def registry
   {:people
