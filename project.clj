@@ -2,11 +2,12 @@
   :description "Reacl tutorial"
   :url "https://github.com/active-group/reacl-tutorial"
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.107" :classifier "aot"]
+                 [org.clojure/clojurescript "1.7.145"]
                  [reacl "1.4.0"]]
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-ring "0.9.6"]
             [lein-figwheel "0.3.7"]
+            [lein-doo "0.1.6-SNAPSHOT"]
             [lein-catnip "0.5.1" :exclusions [org.clojure/clojure]]]
 
   :hooks [leiningen.cljsbuild]
@@ -32,6 +33,7 @@
                                    :asset-path "js/test-out"
                                    :output-to "resources/public/js/test.js"
                                    :output-dir "resources/public/js/test-out"
+                                   :optimizations :simple
                                    :source-map-timestamp true}}]}
 
   :figwheel {
