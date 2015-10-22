@@ -1,4 +1,4 @@
-(ns ^:figwheel-always reacl-tutorial.test-run
+(ns reacl-tutorial.test-run
   (:require [cljs.test :refer-macros [run-tests run-all-tests]]
             [doo.runner :refer-macros [doo-tests]]
             [reacl-tutorial.core-test]))

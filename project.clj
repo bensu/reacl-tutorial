@@ -13,7 +13,7 @@
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
 
-  :clean-targets ^{:protect false} ["resources/public/js" "resources/test/js"]
+  :clean-targets ^{:protect false} ["out" "resources/public/js"]
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
@@ -30,9 +30,7 @@
                                    :on-jsload "reacl-tutorial.test-run/run"}
 
                         :compiler {:main reacl-tutorial.test-run
-                                   :asset-path "js/test-out"
-                                   :output-to "resources/public/js/test.js"
-                                   :output-dir "resources/public/js/test-out"
+                                   :output-to "out/test.js"
                                    :optimizations :simple
                                    :source-map-timestamp true}}]}
 
